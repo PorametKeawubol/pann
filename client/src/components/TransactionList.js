@@ -10,13 +10,11 @@ export default function TransactionList(props) {
       dataIndex: 'id',
     },
     {
-      key: 'id',
       title: 'Date-Time',
       dataIndex: 'publishedAt',
     },
     
     {
-      key: 'id',
       title: 'Result',
       dataIndex: 'result',
     },
