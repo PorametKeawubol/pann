@@ -29,6 +29,7 @@ function StudentPage() {
       setTransactionData(response.data.data.map(d => ({
         id: d.id,
         key: d.id,
+        name: d.attributes.name,
         result: d.attributes.entry.result,
         publishedAt:d.attributes.entry.publishedAt,
       })))
@@ -48,7 +49,7 @@ function StudentPage() {
         <Spin spinning={isLoading}>
           <Typography.Title>
           </Typography.Title>
-          <Divider>คะแนนของนักศึกษา</Divider>
+          <Divider><h4>คะแนนของนักศึกษา</h4></Divider>
           <TransactionList
             data={transactionData} />
         </Spin>

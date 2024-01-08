@@ -1,14 +1,17 @@
-// SimpleLoginForm.js
+
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button,FloatingLabel,Stack,style,Container} from 'react-bootstrap';
 import axios from 'axios';
 import axiosConfig from './axios-interceptor';
 import { useNavigate } from 'react-router-dom';
 
+
+
+
 const LoginForm = () => {
     const navigate = useNavigate()
-    const [username, setUsername] = useState('student_b');
-    const [password, setPassword] = useState('123456');
+    const [username, setUsername] = useState();
+    const [password, setPassword] = useState();
     const [submitEnabled, setSubmitEnabled] = useState(true);
 
     const handleUsernameChange = (e) => {
@@ -31,8 +34,8 @@ const LoginForm = () => {
             axiosConfig.jwt = result.data.jwt
 
             result = await axios.get('http://localhost:1337/api/users/me?populate=role')
-            if(result.data.role){
-                if(result.data.role.name == 'Student'){
+            if (result.data.role) {
+                if (result.data.role.name == 'Student') {
                     navigate('/student');
                 }
             }
@@ -45,33 +48,40 @@ const LoginForm = () => {
     };
 
     return (
-        <Form onSubmit={handleSubmit}>
+        
+        <Form 
+        onSubmit={handleSubmit}
+        >
+            <Stack gap={2} className="col-md-4  min-vh-100 dflex justify-content-center align-item-center mx-auto">
+            <Form.Label className="mx-auto" ><h1 > Please sign in
+            </h1></Form.Label>
             <Form.Group controlId="formBasicUsername">
-                <Form.Label>Username</Form.Label>
+            <FloatingLabel controlId="formBasicUsername" label="Username">
                 <Form.Control
                     type="text"
                     placeholder="Enter username"
                     value={username}
                     onChange={handleUsernameChange}
                     required
-                />
+                /></FloatingLabel>
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
+            <FloatingLabel controlId="formBasicPassword" label="Password">
                 <Form.Control
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={handlePasswordChange}
                     required
-                />
+                /></FloatingLabel>
             </Form.Group>
 
             <Button variant="primary" type="submit" disabled={!submitEnabled}>
                 Submit
-            </Button>
+            </Button></Stack>
         </Form>
+   
     );
 };
 
