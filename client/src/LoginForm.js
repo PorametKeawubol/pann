@@ -39,6 +39,14 @@ const LoginForm = () => {
                     navigate('/student');
                 }
             }
+            
+            console.log(result)
+            result = await axios.get('http://localhost:1337/api/users/me?populate=role')
+            if (result.data.role) {
+                if (result.data.role.name == 'Staff') {
+                    navigate('/staff');
+                }
+            }
             console.log(result)
         } catch (e) {
             console.log(e)
