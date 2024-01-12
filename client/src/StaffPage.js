@@ -5,6 +5,7 @@ import TransactionListforstaff from './components/TransactionListforstaff';
 import { useState, useEffect } from 'react';
 import { Spin, Divider, Typography } from 'antd';
 import axios from 'axios'
+import AddItem from './components/AddItem';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337"
 const URL_TXACTIONS = '/api/events'
@@ -37,6 +38,34 @@ function StaffPage() {
     } finally { setIsLoading(false) }
   }
 
+  const addItem = async (item) => {
+    try {
+      setIsLoading(true)
+      const params = { ...item, action_datetime: moment() }
+      const response = await axios.post(URL_TXACTIONS, { data: params })
+      const { id, attributes } = response.data.data
+      setTransactionData([
+        ...transactionData,
+        { id: id, key: id, ...attributes }
+      ])
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const deleteItem = async (itemId) => {
+    try {
+      setIsLoading(true)
+      await axios.delete(`${URL_TXACTIONS}/${itemId}`)
+      fetchItems()
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
     fetchItems()
@@ -48,9 +77,11 @@ function StaffPage() {
         <Spin spinning={isLoading}>
           <Typography.Title>
           </Typography.Title>
+          
           <Divider><h4>วิชาของอาจาร์ย</h4></Divider>
           <TransactionListforstaff
-            data={transactionData} />
+            data={transactionData} 
+            onTransactionDeleted={deleteItem} />
         </Spin>
       </header>
     </div>

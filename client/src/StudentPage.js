@@ -1,10 +1,10 @@
-import logo from './logo.svg';
+
 import './App.css';
-import moment from 'moment';
 import TransactionList from './components/TransactionList';
 import { useState, useEffect } from 'react';
 import { Spin, Divider, Typography } from 'antd';
 import axios from 'axios'
+import { Form, Button,FloatingLabel,Stack,style,Container,Card} from 'react-bootstrap';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337"
 const URL_TXACTIONS = '/api/events/studentRelated'
@@ -19,6 +19,7 @@ function StudentPage() {
   
   const [isLoading, setIsLoading] = useState(false)
   const [transactionData, setTransactionData] = useState([])
+  
 
 
 
@@ -43,17 +44,20 @@ function StudentPage() {
     fetchItems()
   }, [])
 
+
   return (
     <div className="App">
       <header className="App-header">
-        <Spin spinning={isLoading}>
+      
+      <Spin spinning={isLoading}>
           <Typography.Title>
           </Typography.Title>
           <Divider><h4>คะแนนของนักศึกษา</h4></Divider>
           <TransactionList
             data={transactionData} />
         </Spin>
-      </header>
+
+    </header>
     </div>
   );
 }
