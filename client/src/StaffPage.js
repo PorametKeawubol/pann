@@ -78,7 +78,7 @@ function StaffPage() {
           <Typography.Title>
           </Typography.Title>
           
-          <Divider><h4>วิชาของอาจาร์ย</h4></Divider>
+          <Divider><h4>Subject </h4></Divider>
           <TransactionListforstaff
             data={transactionData} 
             onTransactionDeleted={deleteItem} />
