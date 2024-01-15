@@ -1,8 +1,14 @@
-import { Button, Form, Select, Input, InputNumber, Radio, Space, Table,bottomOptions } from 'antd';
-import React, { useState } from 'react';
+import { Button, Form, Select, Input, InputNumber, Radio, Space, Table,bottomOptions,DatePicker } from 'antd';
+import React, { useState ,useRef,useEffect} from 'react';
 
 export default function AddItem(props) {
   const [form] = Form.useForm()
+  const ref = useRef();
+
+  useEffect(() => {
+    console.log(ref.current);
+    ref.current.focus();
+  }, []);
   
   return (
     <Form form={form} layout="inline" onFinish={(data) => {
@@ -13,13 +19,21 @@ export default function AddItem(props) {
         name="name"
         label="Subject Name"
         rules={[{ required: true }]}
-      ><Input placeholder="name" />
+      ><Input placeholder="Input Subject Name" />
       </Form.Item>
       <Form.Item
         name="effective_datetime"
         label="Datetime"
         rules={[{ required: true }]}>
-        <Input placeholder="effective_datetime" />
+       
+       
+        <DatePicker
+          ref={ref}
+          format="DD/MM/YYYY hh:mm A"
+          onChange={(date, dateString) => console.log(date, dateString)}
+          showTime={{ use12Hours: true }}
+        />
+   
       </Form.Item>
       
       <Form.Item>
