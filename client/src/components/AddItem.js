@@ -1,4 +1,4 @@
-import { Button, Form, Select, Input, InputNumber, Radio, Space, Table,bottomOptions,DatePicker } from 'antd';
+import { Button, Form, Input,DatePicker } from 'antd';
 import React, { useState ,useRef,useEffect} from 'react';
 
 export default function AddItem(props) {
@@ -22,7 +22,7 @@ export default function AddItem(props) {
       ><Input placeholder="Input Subject Name" />
       </Form.Item>
       <Form.Item
-        name="effective_datetime"
+        name="publishedAt"
         label="Datetime"
         rules={[{ required: true }]}>
        

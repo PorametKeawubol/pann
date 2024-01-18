@@ -2,7 +2,7 @@
 import './App.css';
 import TransactionList from './components/TransactionList';
 import { useState, useEffect } from 'react';
-import { Spin, Divider, Typography } from 'antd';
+import { Spin, Divider } from 'antd';
 import axios from 'axios'
 import { Form, Button,FloatingLabel,Stack,style,Container,Card} from 'react-bootstrap';
 
@@ -50,8 +50,6 @@ function StudentPage() {
       <header className="App-header">
       
       <Spin spinning={isLoading}>
-          <Typography.Title>
-          </Typography.Title>
           <Divider><h4>คะแนนของนักศึกษา</h4></Divider>
           <TransactionList
             data={transactionData} />

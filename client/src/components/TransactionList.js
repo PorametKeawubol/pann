@@ -1,5 +1,5 @@
 import { Space, Table, Tag, Button } from 'antd';
-import moment from 'moment';
+
 
 
 export default function TransactionList(props) {
