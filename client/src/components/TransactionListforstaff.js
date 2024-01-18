@@ -8,12 +8,20 @@ export default function TransactionList(props) {
     {
       title: 'Subject',
       dataIndex: 'name',
+      sorter: {
+        compare: (a, b) => a.name.localeCompare(b.name),
+        multiple: 1,
+      },
     },
  
     {
       key: 'id',
       title: 'ID',
       dataIndex: 'id',
+      sorter: {
+        compare: (a, b) => a.id - b.id,
+        multiple: 2,
+      },
     },
 
     {
@@ -33,10 +41,12 @@ export default function TransactionList(props) {
     },
   ];
 
-
+  const onChange = (pagination, filters, sorter, extra) => {
+    console.log('params', pagination, filters, sorter, extra);
+  };
 
 
   return (
-    <Table columns={columns} dataSource={props.data} />
+    <Table columns={columns} dataSource={props.data} onChange={onChange} />
   )
 } 

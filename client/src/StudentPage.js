@@ -2,7 +2,7 @@
 import './App.css';
 import TransactionList from './components/TransactionList';
 import { useState, useEffect } from 'react';
-import { Spin, Divider } from 'antd';
+import { Spin, Divider,Modal } from 'antd';
 import axios from 'axios'
 import { Form, Button,FloatingLabel,Stack,style,Container,Card} from 'react-bootstrap';
 
@@ -31,13 +31,32 @@ function StudentPage() {
         id: d.id,
         key: d.id,
         name: d.attributes.name,
-        result: d.attributes.entry.result,
-        publishedAt:d.attributes.entry.publishedAt,
+        publishedAt:d.attributes.entry.publishedAt
       })))
     } catch (err) {
       console.log(err)
     } finally { setIsLoading(false) }
   }
+
+  const ShowScore = (itemId) => {   //ยังทำไม่เสร็จจจจจจจจจจจจจจจจจจจ
+    Modal.confirm({
+      title: "Are you sure, you want to delete this subject?",
+      okText: "Yes",
+      okType: "danger",
+      onOk: async () => {
+        try {
+          setIsLoading(true);
+          await axios.delete(`${URL_TXACTIONS}/${itemId}`);
+          fetchItems();
+        } catch (err) {
+          console.log(err);
+        } finally {
+          setIsLoading(false);
+        }
+      },
+      onCancel: () => {},
+    });
+  };
 
 
   useEffect(() => {
@@ -50,9 +69,10 @@ function StudentPage() {
       <header className="App-header">
       
       <Spin spinning={isLoading}>
-          <Divider><h4>คะแนนของนักศึกษา</h4></Divider>
+          <Divider><h4>Student Scores</h4></Divider>
           <TransactionList
-            data={transactionData} />
+            data={transactionData} 
+            onTransactionShow={ShowScore}/>
         </Spin>
 
     </header>
