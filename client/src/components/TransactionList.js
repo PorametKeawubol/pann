@@ -1,9 +1,12 @@
 import { Space, Table, Tag, Button } from 'antd';
 import React from 'react';
-import { EyeInvisibleFilled} from "@ant-design/icons";
+import { EyeInvisibleFilled } from "@ant-design/icons";
+import { useState, useEffect } from 'react';
+
 
 
 export default function TransactionList(props) {
+  const [showScoreColumn, setShowScoreColumn] = useState(false);
   const columns = [
     {
       title: 'Subject',
@@ -22,12 +25,12 @@ export default function TransactionList(props) {
         multiple: 2,
       },
     },
-    
+
     {
       title: 'Date-Time',
       dataIndex: 'publishedAt',
     },
-    
+
     {
       title: 'Result',
       dataIndex: 'result',
@@ -37,11 +40,48 @@ export default function TransactionList(props) {
             type="link"
             icon={<EyeInvisibleFilled style={{ color: '#808080' }} />}
             onClick={() => props.onTransactionShow(record.id)}
-            style={{ fontSize: '16px' }} 
+            style={{ fontSize: '16px' }}
           />
-        </Space> )
+        </Space>)
     },
-    
+    {
+      title: 'Score',
+      dataIndex: 'result',
+      //render: (_, record) => (
+        //<div style={{ display: showScoreColumn ? 'block' : 'none' }}>
+          //{record.result}
+        //</div>
+        //),
+    },
+    {
+      title: 'Status',
+      dataIndex: 'result',
+      render: (result) => {
+        let status;
+        let color;
+  
+        if (result < 50) {
+          status = 'Negative';
+          color = '#FF0000';
+        } else if (result >= 50 && result < 80) {
+          status = 'Neutral';
+          color = '#FFA500';
+        } else {
+          status = 'Positive';
+          color = "#87d068";
+        }
+  
+        return (
+          //<div style={{ display: showScoreColumn ? 'block' : 'none' }}>
+            <Tag color={color} key={status}>
+              {status.toUpperCase()}
+            </Tag>
+          //</div>
+        );
+      },
+    },
+
+
 
   ];
 
@@ -52,4 +92,4 @@ export default function TransactionList(props) {
   return (
     <Table columns={columns} dataSource={props.data} onChange={onChange} />
   )
-}
+} 

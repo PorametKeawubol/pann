@@ -387,6 +387,7 @@ export interface ApiEntryEntry extends Schema.CollectionType {
       'manyToOne',
       'api::event.event'
     >;
+    ConfirmView: Attribute.Boolean & Attribute.DefaultTo<false>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

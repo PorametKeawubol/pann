@@ -32,6 +32,10 @@
       "relation": "manyToOne",
       "target": "api::event.event",
       "inversedBy": "entries"
+    },
+    "ConfirmView": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

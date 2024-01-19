@@ -9,6 +9,7 @@ import AddItem from './components/AddItem';
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_TXACTIONS = '/api/events';
 
+
 const StaffPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
