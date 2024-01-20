@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
-import { Form, Button,FloatingLabel,Stack,style,Container} from 'react-bootstrap';
+import { Form, Button,FloatingLabel,Stack,style,Container,Image} from 'react-bootstrap';
 import axios from 'axios';
 import axiosConfig from './axios-interceptor';
 import { useNavigate } from 'react-router-dom';
-
+import signInImage from './icons_311846.svg';
 
 
 
@@ -61,8 +61,9 @@ const LoginForm = () => {
         onSubmit={handleSubmit}
         >
             <Stack gap={2} className="col-md-4  min-vh-100 dflex justify-content-center align-item-center mx-auto">
-            <Form.Label className="mx-auto" ><h1 > Please sign in
-            </h1></Form.Label>
+            <Image src={signInImage} alt="Sign In Image" className="mx-auto" width={240} height={240}/>
+            <Form.Label className="mx-auto" ><h2 >Please sign in
+            </h2></Form.Label>
             <Form.Group controlId="formBasicUsername">
             <FloatingLabel controlId="formBasicUsername" label="Username">
                 <Form.Control
