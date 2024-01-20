@@ -22,13 +22,34 @@ module.exports = createCoreController('api::entry.entry', ({ strapi }) => ({
                 data: {
                     
                     ConfirmView: true,
-               
-                    user : ctx.state.user.id //fgh;fh;h;hsppshlh,[sh,[hs,p[hs]]]
+                    ack_datetime :new Date() ,
+                    seen_datetime: new Date(),
+                    user : ctx.state.user.id 
         
                              
                 }
                 })
             ctx.body = {ConfirmView:true };
+        } catch (err) {
+            ctx.body = err;
+        }
+    },
+    async seenview(ctx) {
+        const entityId = ctx.params.id;
+        try {
+            let seenView1 = await strapi.entityService.findOne('api::entry.entry', entityId)
+            seenView1 = await strapi.entityService.update('api::entry.entry', entityId, {
+                data: {
+                    
+                    
+                    
+                    seen_datetime: new Date(),
+                    user : ctx.state.user.id 
+        
+                             
+                }
+                })
+            ctx.body = {seenView:new Date()};
         } catch (err) {
             ctx.body = err;
         }

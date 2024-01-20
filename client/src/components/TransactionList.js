@@ -2,11 +2,29 @@ import { Space, Table, Tag, Button } from 'antd';
 import React from 'react';
 import { EyeInvisibleFilled } from "@ant-design/icons";
 import { useState, useEffect } from 'react';
+import axios from 'axios';
+const URL_TXACTIONS2 = '/api/entries'
 
 
 
 export default function TransactionList(props) {
-  const [showScoreColumn, setShowScoreColumn] = useState(false);
+  const onEyeInvisibleClick = async (itemId) => {
+    const view = {
+      data: {
+        seen_datetime: new Date(),
+        id: itemId
+      },
+    };
+    try {
+      await axios.put(`${URL_TXACTIONS2}/${itemId}/seenview`, view);
+
+    } catch (error) {
+      console.error("Error updating record:", error);
+    }
+
+    props.onEyeInvisibleClick(itemId);
+  };
+
   const columns = [
     {
       title: 'Subject',
@@ -38,20 +56,18 @@ export default function TransactionList(props) {
         <Space size="large" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Button
             type="link"
-            icon={<EyeInvisibleFilled style={{ color: '#808080' }} />}
+            icon={<EyeInvisibleFilled style={{ color: '#808080' }} onClick={() => props.onEyeInvisibleClick(record.id)}/>}
+            
             onClick={() => props.onTransactionShow(record.id)}
             style={{ fontSize: '16px' }}
           />
         </Space>)
+
     },
     {
       title: 'Score',
       dataIndex: 'result',
-      //render: (_, record) => (
-        //<div style={{ display: showScoreColumn ? 'block' : 'none' }}>
-          //{record.result}
-        //</div>
-        //),
+
     },
     {
       title: 'Status',
@@ -59,7 +75,7 @@ export default function TransactionList(props) {
       render: (result) => {
         let status;
         let color;
-  
+
         if (result < 50) {
           status = 'Negative';
           color = '#FF0000';
@@ -70,20 +86,25 @@ export default function TransactionList(props) {
           status = 'Positive';
           color = "#87d068";
         }
-  
+
         return (
-          //<div style={{ display: showScoreColumn ? 'block' : 'none' }}>
-            <Tag color={color} key={status}>
-              {status.toUpperCase()}
-            </Tag>
-          //</div>
+
+          <Tag color={color} key={status}>
+            {status.toUpperCase()}
+          </Tag>
+
         );
       },
     },
 
 
 
+
+
   ];
+
+
+
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
