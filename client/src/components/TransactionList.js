@@ -1,14 +1,14 @@
 import { Space, Table, Tag, Button } from 'antd';
-import React from 'react';
-import { EyeInvisibleFilled } from "@ant-design/icons";
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { EyeInvisibleFilled, EyeFilled } from "@ant-design/icons";
 import axios from 'axios';
-const URL_TXACTIONS2 = '/api/entries'
 
-
+const URL_TXACTIONS2 = '/api/entries';
 
 export default function TransactionList(props) {
-  const onEyeInvisibleClick = async (itemId) => {
+  const [clickedRows, setClickedRows] = useState([]);
+
+  const onEyeIconClick = async (itemId) => {
     const view = {
       data: {
         seen_datetime: new Date(),
@@ -17,12 +17,20 @@ export default function TransactionList(props) {
     };
     try {
       await axios.put(`${URL_TXACTIONS2}/${itemId}/seenview`, view);
-
     } catch (error) {
       console.error("Error updating record:", error);
     }
 
+    if (clickedRows.includes(itemId)) {
+      setClickedRows((prevClickedRows) => prevClickedRows.filter((id) => id !== itemId));
+      
+    } else {
+      setClickedRows((prevClickedRows) => [...prevClickedRows, itemId]);
+      props.onTransactionShow(itemId);
+    }
+
     props.onEyeInvisibleClick(itemId);
+    
   };
 
   const columns = [
@@ -43,12 +51,10 @@ export default function TransactionList(props) {
         multiple: 2,
       },
     },
-
     {
       title: 'Date-Time',
       dataIndex: 'publishedAt',
     },
-
     {
       title: 'Result',
       dataIndex: 'result',
@@ -56,23 +62,21 @@ export default function TransactionList(props) {
         <Space size="large" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Button
             type="link"
-            icon={<EyeInvisibleFilled style={{ color: '#808080' }} onClick={() => props.onEyeInvisibleClick(record.id)}/>}
-            
-            onClick={() => props.onTransactionShow(record.id)}
-            style={{ fontSize: '16px' }}
+            icon={clickedRows.includes(record.id) ? <EyeFilled style={{ color: '#808080' }} /> : <EyeInvisibleFilled style={{ color: '#808080' }} />}
+            onClick={() => onEyeIconClick(record.id)}
           />
-        </Space>)
-
+        </Space>
+      ),
     },
     {
       title: 'Score',
       dataIndex: 'result',
-
+      render: (_, record) => (clickedRows.includes(record.id) ? <span>{record.result}</span> : null),
     },
     {
       title: 'Status',
       dataIndex: 'result',
-      render: (result) => {
+      render: (result, record) => {
         let status;
         let color;
 
@@ -88,23 +92,15 @@ export default function TransactionList(props) {
         }
 
         return (
-
-          <Tag color={color} key={status}>
-            {status.toUpperCase()}
-          </Tag>
-
+          clickedRows.includes(record.id) ? (
+            <Tag color={color} key={status}>
+              {status.toUpperCase()}
+            </Tag>
+          ) : null
         );
       },
     },
-
-
-
-
-
   ];
-
-
-
 
   const onChange = (pagination, filters, sorter, extra) => {
     console.log('params', pagination, filters, sorter, extra);
@@ -112,5 +108,5 @@ export default function TransactionList(props) {
 
   return (
     <Table columns={columns} dataSource={props.data} onChange={onChange} />
-  )
-} 
+  );
+}
