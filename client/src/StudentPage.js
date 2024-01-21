@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Spin, Divider, Modal } from 'antd';
 import axios from 'axios';
 import TransactionList from './components/TransactionList';
+import { Navbar, Container, Nav } from 'react-bootstrap';
+import Logout from './components/logout';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337"
 const URL_TXACTIONS = '/api/events/studentRelated'
@@ -32,7 +34,7 @@ function StudentPage() {
     }
   };
 
- 
+
 
   const handleTransactionShow = async (itemId) => {
     const viewItem = transactionData.find((item) => item.id === itemId);
@@ -60,7 +62,7 @@ function StudentPage() {
           setIsLoading(false);
         }
       },
-      onCancel: () => {},
+      onCancel: () => { },
     });
   };
 
@@ -78,7 +80,7 @@ function StudentPage() {
       console.error("Error updating record:", error);
     }
 
-   
+
   };
 
   useEffect(() => {
@@ -86,8 +88,25 @@ function StudentPage() {
   }, []);
 
   return (
-    <div className="App">
+  
+    <div className="App" >
+       
+       <Navbar bg="light" expand="lg">
+        <Container>
+          <Navbar.Brand>Student Page</Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse className="justify-content-end">
+            <Nav>
+              <Nav.Item>
+                <Nav.Link onClick={Logout}>Logout</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+   
       <header className="App-header">
+
         <Spin spinning={isLoading}>
           <Divider><h4>Student Scores</h4></Divider>
           <TransactionList
@@ -95,8 +114,12 @@ function StudentPage() {
             onTransactionShow={handleTransactionShow}
             onEyeInvisibleClick={onEyeInvisibleClick}
           />
+
         </Spin>
+
       </header>
+      
+
     </div>
   );
 }

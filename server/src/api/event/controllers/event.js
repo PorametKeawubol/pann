@@ -10,6 +10,7 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 
 
+
 module.exports = createCoreController('api::event.event', ({ strapi }) => ({
    
     async find(ctx) {
@@ -60,8 +61,10 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
         } catch (err) {
             ctx.body = err;
         }
+        
     },
     
+
 
     async listEntries(ctx) {
         const sanitizedQueryParams = await this.sanitizeQuery(ctx);
@@ -70,32 +73,30 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
             sanitizedQueryParams.filters = {};
         }
     
-        
         sanitizedQueryParams.filters['owner'] = ctx.state.user.id;
     
         try {
             const { results } = await strapi.service('api::event.event').find(sanitizedQueryParams);
             const sanitizedResults = await this.sanitizeOutput(results, ctx);
     
-            
             // @ts-ignore
             for (const event of sanitizedResults) {
                 const { results: entryResults } = await strapi.service('api::entry.entry').find({
                     filters: {
                         event: event['id'],
-                    }
+                    },
+                   
+                    populate: { owner: true },
                 });
     
-               
                 const mappedEntries = entryResults.map(entry => ({
                     ...entry,
                     event: {
                         id: event['id'],
-                        
                     },
                 }));
     
-                
+               
                 event['entries'] = mappedEntries;
             }
     
@@ -135,6 +136,10 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
 
         return this.transformResponse(sanitizedResults, { pagination });
     },
+  
+      
+    
+     
 
 })
 );

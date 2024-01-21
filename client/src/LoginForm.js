@@ -55,6 +55,8 @@ const LoginForm = () => {
         }
     };
 
+    
+
     return (
         
         <Form 
@@ -62,6 +64,7 @@ const LoginForm = () => {
         >
             <Stack gap={2} className="col-md-4  min-vh-100 dflex justify-content-center align-item-center mx-auto">
             <Image src={signInImage} alt="Sign In Image" className="mx-auto" width={240} height={240}/>
+            
             <Form.Label className="mx-auto" ><h2 >Please sign in
             </h2></Form.Label>
             <Form.Group controlId="formBasicUsername">
@@ -90,6 +93,7 @@ const LoginForm = () => {
                 Submit
             </Button></Stack>
         </Form>
+        
    
     );
 };

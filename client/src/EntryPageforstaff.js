@@ -3,38 +3,44 @@ import React, { useState, useEffect,useRef } from 'react';
 import { Spin, Divider, Typography, Modal, Form, Input, Button, DatePicker } from 'antd';
 import moment from 'moment';
 import axios from 'axios';
-import TransactionListforstaff from './components/TransactionListforstaff';
-import AddItem from './components/AddItem';
+import Entryforstaff from './components/entryforstaff';
+import PostEntry from './components/PostEntry';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import Logout from './components/logout';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
-const URL_TXACTIONS = '/api/events';
+const URL_TXACTIONS = 'api/events/:id/entries';
 
 
-const StaffPage = () => {
+const EntryPageforstaff = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [transactionData, setTransactionData] = useState([]);
   const [editFormData, setEditFormData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const ref = useRef();
 
+ 
+
   const fetchItems = async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(URL_TXACTIONS);
+      console.log(response);
+      
       setTransactionData(response.data.data.map((d) => ({
-        id: d.id,
-        key: d.id,
-        name: d.attributes.name,
-        publishedAt: d.attributes.publishedAt,
+        id: d.attributes.entries.data.map(entry => entry.id),
+        username: d.attributes.entries.data.map(entry => entry.attributes.owner.data.attributes.username),
+        seen_datetime: d.attributes.entries.data.map(entry => entry.attributes.seen_datetime),
+        ack_datetime: d.attributes.entries.data.map(entry => entry.attributes.ack_datetime),
+        result: d.attributes.entries.data.map(entry => entry.attributes.result),
+        ConfirmView: d.attributes.entries.data.map(entry => entry.attributes.ConfirmView)
       })));
     } catch (err) {
       console.log(err);
     } finally {
       setIsLoading(false);
     }
-  };
+  }; 
 
   const addItem = async (item) => {
     try {
@@ -69,13 +75,13 @@ const StaffPage = () => {
         initialValues={currentItem}
         onFinish={(values) => handleEdit(values, itemId)}
       >
-        <Form.Item label="Subjesct Name" name="name" rules={[{ required: true, message: 'Please enter a subject name!' }]}>
+        <Form.Item label="Student Name" name="username" rules={[{ required: true, message: 'Please enter a subject name!' }]}>
           <Input />
         </Form.Item>
         <Form.Item label="ID" name="id" rules={[{ required: true}]}>
           <Input disabled />
         </Form.Item>
-        <Form.Item label="Date-Time" name="publishedAt" rules={[{ required: true, message: 'Please enter a Date-Time!' }]}>
+        <Form.Item label="SeenDate-Time" name="seen_datetime" rules={[{ required: true, message: 'Please enter a Date-Time!' }]}>
         
           <Input />
         </Form.Item>
@@ -148,7 +154,7 @@ const StaffPage = () => {
 
   return (
     <div className="App">
-      <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg">
         <Container>
           <Navbar.Brand>Staff Page</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -164,11 +170,11 @@ const StaffPage = () => {
       <header className="App-header">
         <Spin spinning={isLoading}>
           <Typography.Title></Typography.Title>
-          <AddItem onItemAdded={addItem} />
+          <PostEntry onItemAdded={addItem} />
           <Divider>
-            <h4>Subject </h4>
+            <h4>Subject entry</h4>
           </Divider>
-          <TransactionListforstaff
+          <Entryforstaff
             data={transactionData}
             onTransactionDeleted={deleteItem}
             onTransactionEdit={editItem}
@@ -179,4 +185,4 @@ const StaffPage = () => {
   );
 };
 
-export default StaffPage;
+export default EntryPageforstaff;
