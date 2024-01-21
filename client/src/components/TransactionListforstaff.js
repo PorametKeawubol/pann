@@ -1,5 +1,5 @@
 import { Space, Table, Tag, Button } from 'antd';
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined,ArrowsAltOutlined } from "@ant-design/icons";
 import moment from 'moment';
 import { useState, useEffect } from 'react';
 
@@ -34,9 +34,10 @@ export default function TransactionList(props) {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
-        <Space size="middle">
-          <EditOutlined onClick={() => props.onTransactionEdit(record.id)} /> 
-          <DeleteOutlined onClick={() => props.onTransactionDeleted(record.id)}  style={{ color: "red", marginLeft: 10 }} />
+        <Space size={'middle'}  >
+          <EditOutlined onClick={() => props.onTransactionEdit(record.id)}  />
+          <DeleteOutlined onClick={() => props.onTransactionDeleted(record.id)} style={{ color: "red", marginLeft: 10 }} />
+          <ArrowsAltOutlined onClick={() => props.onTransactionEntry(record.id)} style={{  marginLeft: 10 }}/>
         </Space>
       ),
     },

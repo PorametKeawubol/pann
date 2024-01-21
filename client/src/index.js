@@ -25,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: "/staff",
     element: <StaffPage/>,
+  },
+  {
+    path: "/staff/entry",
+    element: <EntryPageforstaff/>,
   }
 ]);
 

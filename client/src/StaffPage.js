@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Spin, Divider, Typography, Modal, Form, Input, Button, DatePicker } from 'antd';
 import moment from 'moment';
 import axios from 'axios';
@@ -7,6 +7,9 @@ import TransactionListforstaff from './components/TransactionListforstaff';
 import AddItem from './components/AddItem';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import Logout from './components/logout';
+import { Link } from 'react-router-dom';
+import EntryPageforstaff from './EntryPageforstaff';
+import { useNavigate } from 'react-router-dom';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_TXACTIONS = '/api/events';
@@ -18,6 +21,7 @@ const StaffPage = () => {
   const [editFormData, setEditFormData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const ref = useRef();
+  const navigate = useNavigate()
 
   const fetchItems = async () => {
     try {
@@ -66,25 +70,25 @@ const StaffPage = () => {
       htmlType: "submit",
       content: (
         <Form
-        initialValues={currentItem}
-        onFinish={(values) => handleEdit(values, itemId)}
-      >
-        <Form.Item label="Subjesct Name" name="name" rules={[{ required: true, message: 'Please enter a subject name!' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item label="ID" name="id" rules={[{ required: true}]}>
-          <Input disabled />
-        </Form.Item>
-        <Form.Item label="Date-Time" name="publishedAt" rules={[{ required: true, message: 'Please enter a Date-Time!' }]}>
-        
-          <Input />
-        </Form.Item>
-        <Form.Item >
-          <Button type="primary" htmlType="submit">
-            Save
-          </Button>
-        </Form.Item>
-      </Form>
+          initialValues={currentItem}
+          onFinish={(values) => handleEdit(values, itemId)}
+        >
+          <Form.Item label="Subjesct Name" name="name" rules={[{ required: true, message: 'Please enter a subject name!' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="ID" name="id" rules={[{ required: true }]}>
+            <Input disabled />
+          </Form.Item>
+          <Form.Item label="Date-Time" name="publishedAt" rules={[{ required: true, message: 'Please enter a Date-Time!' }]}>
+
+            <Input />
+          </Form.Item>
+          <Form.Item >
+            <Button type="primary" htmlType="submit">
+              Save
+            </Button>
+          </Form.Item>
+        </Form>
       ),
       okButtonProps: {
         style: { display: 'none' },
@@ -92,7 +96,7 @@ const StaffPage = () => {
       onCancel: () => {
         setEditFormData({});
         setIsEditing(false);
-      
+
       },
     });
   };
@@ -101,16 +105,16 @@ const StaffPage = () => {
     try {
       console.log("Edit values:", values);
       console.log("Item ID:", itemId);
-  
+
       setIsLoading(true);
-  
+
       const payload = {
         data: {
           ...values,
           id: itemId,
         },
       };
-  
+
       await axios.put(`${URL_TXACTIONS}/${itemId}`, payload);
       fetchItems();
     } catch (err) {
@@ -138,8 +142,12 @@ const StaffPage = () => {
           setIsLoading(false);
         }
       },
-      onCancel: () => {},
+      onCancel: () => { },
     });
+  };
+  const showentry = (itemId) => {
+    navigate('/staff/entry');
+    
   };
 
   useEffect(() => {
@@ -172,6 +180,7 @@ const StaffPage = () => {
             data={transactionData}
             onTransactionDeleted={deleteItem}
             onTransactionEdit={editItem}
+            onTransactionEntry={showentry}
           />
         </Spin>
       </header>
