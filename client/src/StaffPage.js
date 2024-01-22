@@ -146,9 +146,11 @@ const StaffPage = () => {
     });
   };
   const showentry = (itemId) => {
-    navigate('/staff/entry');
+    navigate(`/staff/entry?itemId=${itemId}`);
     
   };
+
+  
 
   useEffect(() => {
     fetchItems();

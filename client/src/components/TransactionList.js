@@ -2,6 +2,7 @@ import { Space, Table, Tag, Button } from 'antd';
 import React, { useState } from 'react';
 import { EyeInvisibleFilled, EyeFilled } from "@ant-design/icons";
 import axios from 'axios';
+import moment from 'moment';
 
 const URL_TXACTIONS2 = '/api/entries';
 
@@ -54,6 +55,7 @@ export default function TransactionList(props) {
     {
       title: 'Date-Time',
       dataIndex: 'publishedAt',
+      render: (text) => moment(text).isValid() ? moment(text).format('YYYY-MM-DD HH:mm:ss') : text,
     },
     {
       title: 'Result',

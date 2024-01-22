@@ -28,6 +28,7 @@ export default function TransactionList(props) {
     {
       title: 'Date-Time',
       dataIndex: 'publishedAt',
+      render: (text) => moment(text).isValid() ? moment(text).format('YYYY-MM-DD HH:mm:ss') : text,
     },
 
     {

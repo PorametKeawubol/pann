@@ -14,9 +14,8 @@ export default function TransactionList(props) {
         multiple: 1,
       },
     },
- 
     {
-     
+      key: 'id',
       title: 'ID',
       dataIndex: 'id',
       sorter: {
@@ -24,14 +23,17 @@ export default function TransactionList(props) {
         multiple: 2,
       },
     },
+   
 
     {
       title: 'SeenDate-Time',
       dataIndex: 'seen_datetime',
+      render: (text) => moment(text).isValid() ? moment(text).format('YYYY-MM-DD HH:mm:ss') : text,
     },
     {
         title: 'AckDate-Time',
         dataIndex: 'ack_datetime',
+        render: (text) => moment(text).isValid() ? moment(text).format('YYYY-MM-DD HH:mm:ss') : text,
     },
     {
         title: 'Result',
@@ -51,8 +53,8 @@ export default function TransactionList(props) {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <EditOutlined onClick={() => props.onTransactionEdit(record.id)} /> 
-          <DeleteOutlined onClick={() => props.onTransactionDeleted(record.id)}  style={{ color: "red", marginLeft: 10 }} />
+          <EditOutlined onClick={() => props.onTransactionEdit(record.itemId)} /> 
+          <DeleteOutlined onClick={() => props.onTransactionDeleted(record.itemId)}  style={{ color: "red", marginLeft: 10 }} />
         </Space>
       ),
     },

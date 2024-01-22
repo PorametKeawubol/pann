@@ -5,6 +5,8 @@ import TransactionList from './components/TransactionList';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import Logout from './components/logout';
 
+
+
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337"
 const URL_TXACTIONS = '/api/events/studentRelated'
 const URL_TXACTIONS1 = '/api/entries'
@@ -41,7 +43,7 @@ function StudentPage() {
     setShowFormData(viewItem);
     setIsShow(true);
     Modal.confirm({
-      title: "Are you sure you want to know the score?",
+      title: "Are you sure you want to give the teacher the score acknowledgment?",
       okText: "Yes",
       okType: "danger",
       onOk: async () => {
@@ -98,7 +100,8 @@ function StudentPage() {
           <Navbar.Collapse className="justify-content-end">
             <Nav>
               <Nav.Item>
-                <Nav.Link onClick={Logout}>Logout</Nav.Link>
+              
+                <Nav.Link onClick={Logout}> Logout</Nav.Link>
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>
