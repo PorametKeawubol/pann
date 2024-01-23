@@ -6,10 +6,11 @@ import axios from 'axios';
 import TransactionListforstaff from './components/TransactionListforstaff';
 import AddItem from './components/AddItem';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-import Logout from './components/logout';
+
 import { Link } from 'react-router-dom';
 import EntryPageforstaff from './EntryPageforstaff';
 import { useNavigate } from 'react-router-dom';
+import { useSessionStorage } from './SessionStorage/useSessionStorage';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_TXACTIONS = '/api/events';
@@ -22,6 +23,7 @@ const StaffPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const ref = useRef();
   const navigate = useNavigate()
+  const { handleLogout } = useSessionStorage();
 
   const fetchItems = async () => {
     try {
@@ -165,7 +167,7 @@ const StaffPage = () => {
           <Navbar.Collapse className="justify-content-end">
             <Nav>
               <Nav.Item>
-                <Nav.Link onClick={Logout}>Logout</Nav.Link>
+                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>

@@ -10,7 +10,6 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 
 
-
 module.exports = createCoreController('api::event.event', ({ strapi }) => ({
    
     async find(ctx) {
@@ -56,11 +55,14 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
 
     async postEntries(ctx) {
         const entityId = ctx.params.id;
-        try {
-            ctx.body = { ok: 1 };
-        } catch (err) {
-            ctx.body = err;
-        }
+        const entryData = ctx.request;
+        const entry = await strapi.entityService.create('api::entry.entry', {
+            data: {
+              ...entryData,
+              owner: ctx.state.user.id, 
+            },
+          });
+          ctx.body = entry;
         
     },
     

@@ -5,11 +5,13 @@ import axios from 'axios';
 import axiosConfig from './axios-interceptor';
 import { useNavigate } from 'react-router-dom';
 import signInImage from './icons_311846.svg';
+import { useSessionStorage } from './SessionStorage/useSessionStorage';
 
 
 
 const LoginForm = () => {
     const navigate = useNavigate()
+    const { setItem, getItem, removeItem, clearStorage } = useSessionStorage();
     const [username, setUsername] = useState();
     const [password, setPassword] = useState();
     const [submitEnabled, setSubmitEnabled] = useState(true);
@@ -25,12 +27,15 @@ const LoginForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitEnabled(false);
+    
 
         try {
             let result = await axios.post('http://localhost:1337/api/auth/local', {
                 identifier: username,
                 password: password
             })
+            sessionStorage.setItem('jwt', result.data.jwt);
+            setItem('jwt', result.data.jwt);
             axiosConfig.jwt = result.data.jwt
 
             result = await axios.get('http://localhost:1337/api/users/me?populate=role')

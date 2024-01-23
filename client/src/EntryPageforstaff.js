@@ -6,8 +6,8 @@ import axios from 'axios';
 import Entryforstaff from './components/entryforstaff';
 import PostEntry from './components/PostEntry';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-import Logout from './components/logout';
 import { useLocation } from 'react-router-dom';
+import { useSessionStorage } from './SessionStorage/useSessionStorage';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_TXACTIONS = 'api/events/:id/entries?filters[id][$eq]';
@@ -22,6 +22,7 @@ const EntryPageforstaff = () => {
   const [editFormData, setEditFormData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const ref = useRef();
+  const { handleLogout } = useSessionStorage();
 
  
 
@@ -167,7 +168,7 @@ const EntryPageforstaff = () => {
           <Navbar.Collapse className="justify-content-end">
             <Nav>
               <Nav.Item>
-                <Nav.Link onClick={Logout}>Logout</Nav.Link>
+                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>

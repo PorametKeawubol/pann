@@ -3,8 +3,9 @@ import { Spin, Divider, Modal } from 'antd';
 import axios from 'axios';
 import TransactionList from './components/TransactionList';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-import Logout from './components/logout';
 
+import { useSessionStorage } from './SessionStorage/useSessionStorage';
+import handleLogout from './SessionStorage/useSessionStorage';
 
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337"
@@ -17,17 +18,23 @@ function StudentPage() {
   const [transactionData, setTransactionData] = useState([]);
   const [ShowFormData, setShowFormData] = useState({});
   const [isShow, setIsShow] = useState(false);
+  const { getItem } = useSessionStorage();
+  const { handleLogout } = useSessionStorage();
 
-  const fetchItems = async () => {
+  const fetchItems = async (token) => {
     try {
       setIsLoading(true);
-      const response = await axios.get(URL_TXACTIONS);
-      setTransactionData(response.data.data.map(d => ({
+      const response = await axios.get(URL_TXACTIONS, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setTransactionData(response.data.data.map((d) => ({
         id: d.attributes.entry.id,
         key: d.id,
         name: d.attributes.name,
         publishedAt: d.attributes.entry.publishedAt,
-        result: d.attributes.entry.result
+        result: d.attributes.entry.result,
       })));
     } catch (err) {
       console.error(err);
@@ -85,9 +92,17 @@ function StudentPage() {
 
   };
 
+  const refreshData = () => {
+    const jwtToken = getItem('jwt');
+    if (jwtToken) {
+      fetchItems(jwtToken);
+    }
+  };
+
+  
   useEffect(() => {
-    fetchItems();
-  }, []);
+    refreshData();
+  }, [getItem]);
 
   return (
   
@@ -101,7 +116,7 @@ function StudentPage() {
             <Nav>
               <Nav.Item>
               
-                <Nav.Link onClick={Logout}> Logout</Nav.Link>
+                <Nav.Link onClick={handleLogout}> Logout</Nav.Link>
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>
