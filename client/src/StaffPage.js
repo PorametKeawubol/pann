@@ -6,7 +6,6 @@ import axios from 'axios';
 import TransactionListforstaff from './components/TransactionListforstaff';
 import AddItem from './components/AddItem';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-
 import { Link } from 'react-router-dom';
 import EntryPageforstaff from './EntryPageforstaff';
 import { useNavigate } from 'react-router-dom';
@@ -24,11 +23,16 @@ const StaffPage = () => {
   const ref = useRef();
   const navigate = useNavigate()
   const { handleLogout } = useSessionStorage();
+  const { getItem } = useSessionStorage();
 
-  const fetchItems = async () => {
+  const fetchItems = async (token) => {
     try {
       setIsLoading(true);
-      const response = await axios.get(URL_TXACTIONS);
+      const response = await axios.get(URL_TXACTIONS, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setTransactionData(response.data.data.map((d) => ({
         id: d.id,
         key: d.id,
@@ -152,11 +156,18 @@ const StaffPage = () => {
     
   };
 
+  const refreshData = () => {
+    const jwtToken = getItem('jwt');
+    if (jwtToken) {
+      fetchItems(jwtToken);
+    }
+  };
+
   
 
   useEffect(() => {
-    fetchItems();
-  }, []);
+    refreshData();
+  }, [getItem]);
 
   return (
     <div className="App">

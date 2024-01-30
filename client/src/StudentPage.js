@@ -3,9 +3,8 @@ import { Spin, Divider, Modal } from 'antd';
 import axios from 'axios';
 import TransactionList from './components/TransactionList';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-
 import { useSessionStorage } from './SessionStorage/useSessionStorage';
-import handleLogout from './SessionStorage/useSessionStorage';
+
 
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337"
@@ -106,7 +105,7 @@ function StudentPage() {
 
   return (
   
-    <div className="App" >
+    <div >
        
        <Navbar bg="light" expand="lg">
         <Container>
@@ -115,29 +114,22 @@ function StudentPage() {
           <Navbar.Collapse className="justify-content-end">
             <Nav>
               <Nav.Item>
-              
                 <Nav.Link onClick={handleLogout}> Logout</Nav.Link>
               </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-   
-      <header className="App-header">
-
-        <Spin spinning={isLoading}>
+      <header >
           <Divider><h4>Student Scores</h4></Divider>
-          <TransactionList
+      </header>
+      <Spin spinning={isLoading}>
+      <TransactionList
             data={transactionData}
             onTransactionShow={handleTransactionShow}
             onEyeInvisibleClick={onEyeInvisibleClick}
           />
-
-        </Spin>
-
-      </header>
-      
-
+</Spin>
     </div>
   );
 }

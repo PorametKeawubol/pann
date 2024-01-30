@@ -13,8 +13,8 @@ import StaffPage from './StaffPage';
 import EntryPageforstaff from './EntryPageforstaff';
 import { Routes, Route, Link, Outlet, useNavigate } from 'react-router-dom';
 
-function MainApp() {
-  const navigate = useNavigate();
+function App() {
+  
   return (
     <div>
       <Routes>
@@ -28,4 +28,4 @@ function MainApp() {
   );
 }
 
-export default MainApp;
+export default App;
