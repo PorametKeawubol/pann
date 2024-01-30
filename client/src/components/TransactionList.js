@@ -1,8 +1,9 @@
-import { Space, Table, Tag, Button } from 'antd';
 import React, { useState } from 'react';
+import { Card, Button,Row} from 'react-bootstrap';
 import { EyeInvisibleFilled, EyeFilled } from "@ant-design/icons";
 import axios from 'axios';
 import moment from 'moment';
+import './TransactionList.css' ;
 
 const URL_TXACTIONS2 = '/api/entries';
 
@@ -31,84 +32,38 @@ export default function TransactionList(props) {
     }
 
     props.onEyeInvisibleClick(itemId);
-    
-  };
-
-  const columns = [
-    {
-      title: 'Subject',
-      dataIndex: 'name',
-      sorter: {
-        compare: (a, b) => a.name.localeCompare(b.name),
-        multiple: 1,
-      },
-    },
-    {
-      key: 'id',
-      title: 'ID',
-      dataIndex: 'id',
-      sorter: {
-        compare: (a, b) => a.id - b.id,
-        multiple: 2,
-      },
-    },
-    {
-      title: 'Date-Time',
-      dataIndex: 'publishedAt',
-      render: (text) => moment(text).isValid() ? moment(text).format('YYYY-MM-DD HH:mm:ss') : text,
-    },
-    {
-      title: 'Result',
-      dataIndex: 'result',
-      render: (_, record) => (
-        <Space size="large" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <Button
-            type="link"
-            icon={clickedRows.includes(record.id) ? <EyeFilled style={{ color: '#808080' }} /> : <EyeInvisibleFilled style={{ color: '#808080' }} />}
-            onClick={() => onEyeIconClick(record.id)}
-          />
-        </Space>
-      ),
-    },
-    {
-      title: 'Score',
-      dataIndex: 'result',
-      render: (_, record) => (clickedRows.includes(record.id) ? <span>{record.result}</span> : null),
-    },
-    {
-      title: 'Status',
-      dataIndex: 'result',
-      render: (result, record) => {
-        let status;
-        let color;
-
-        if (result < 50) {
-          status = 'Negative';
-          color = '#FF0000';
-        } else if (result >= 50 && result < 80) {
-          status = 'Neutral';
-          color = '#FFA500';
-        } else {
-          status = 'Positive';
-          color = "#87d068";
-        }
-
-        return (
-          clickedRows.includes(record.id) ? (
-            <Tag color={color} key={status}>
-              {status.toUpperCase()}
-            </Tag>
-          ) : null
-        );
-      },
-    },
-  ];
-
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
   };
 
   return (
-    <Table columns={columns} dataSource={props.data} onChange={onChange} />
+    <Row xs={1} md={2} lg={4} className="row-g4" >
+      {props.data.map(record => (
+        <Card key={record.id} className={`card ${clickedRows.includes(record.id) ? 'active' : ''}`}>
+          <Card.Body className="card-body">
+            <div className="card-details">
+              <Card.Title className="card-title">{record.name}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">ID: {record.id}</Card.Subtitle>
+              <Card.Text>Date-Time: {moment(record.publishedAt).isValid() ? moment(record.publishedAt).format('YYYY-MM-DD HH:mm:ss') : record.publishedAt}</Card.Text>
+            </div>
+            <Button
+              variant="link"
+              className="card-btn"
+              onClick={() => onEyeIconClick(record.id)}
+            >
+              {clickedRows.includes(record.id) ? <EyeFilled style={{ color: '#808080' }} /> : <EyeInvisibleFilled style={{ color: '#808080' }} />}
+            </Button>
+          </Card.Body>
+          {clickedRows.includes(record.id) && (
+            <div className={`card-details status-${record.result < 50 ? 'negative' : (record.result < 80 ? 'neutral' : 'positive')}`}>
+              <Card.Text>Score: {record.result}</Card.Text>
+              <Card.Text>Status:
+                <span>
+                  {record.result < 50 ? 'Negative' : (record.result < 80 ? 'Neutral' : 'Positive')}
+                </span>
+              </Card.Text>
+            </div>
+          )}
+        </Card>
+      ))}
+    </Row>
   );
-}
+};  

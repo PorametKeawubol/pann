@@ -34,7 +34,6 @@ module.exports = createCoreController('api::event.event', ({ strapi }) => ({
         })
         return updated
     },
-
     async update(ctx) {
         const entityId = ctx.params.id;
 

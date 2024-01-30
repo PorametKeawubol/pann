@@ -23,14 +23,19 @@ const EntryPageforstaff = () => {
   const [isEditing, setIsEditing] = useState(false);
   const ref = useRef();
   const { handleLogout } = useSessionStorage();
+  const { getItem } = useSessionStorage();
 
  
 
-  const fetchItems = async () => {
+  const fetchItems = async (token) => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${URL_TXACTIONS}=${itemId}`);
-      console.log(response);
+      const response = await axios.get(`${URL_TXACTIONS}=${itemId}`,
+    {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
   
       setTransactionData(response.data.data.flatMap(d => {
         return d.attributes.entries.data.map(entry => ({
@@ -155,9 +160,16 @@ const EntryPageforstaff = () => {
     });
   };
 
+  const refreshData = () => {
+    const jwtToken = getItem('jwt');
+    if (jwtToken) {
+      fetchItems(jwtToken);
+    }
+  };
+
   useEffect(() => {
-    fetchItems();
-  }, []);
+    refreshData();
+  }, [getItem]);
 
   return (
     <div className="App">
