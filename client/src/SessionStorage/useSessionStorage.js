@@ -34,8 +34,6 @@ export const SessionStorageProvider = ({ children }) => {
   const handleLogout = () => {
     
     removeItem('jwt');
-
-    
     navigate('/');
   };
 
