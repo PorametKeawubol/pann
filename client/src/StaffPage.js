@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom';
 import EntryPageforstaff from './EntryPageforstaff';
 import { useNavigate } from 'react-router-dom';
 import { useSessionStorage } from './SessionStorage/useSessionStorage';
+import AppSearch from './components/AppSearch';
+
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_TXACTIONS = '/api/events';
@@ -24,11 +26,19 @@ const StaffPage = () => {
   const navigate = useNavigate()
   const { handleLogout } = useSessionStorage();
   const { getItem } = useSessionStorage();
+  const [searchText, setSearchText] = useState('');
 
-  const fetchItems = async (token) => {
+  const fetchItems = async (token,search) => {
     try {
       setIsLoading(true);
       const response = await axios.get(URL_TXACTIONS, {
+        params: {
+          filters: {
+            name: {
+              $eq: search,
+            },
+          },
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -46,10 +56,10 @@ const StaffPage = () => {
     }
   };
 
-  const addItem = async (item) => {
+  const addItem = async (itemId) => {
     try {
       setIsLoading(true);
-      const params = { ...item, action_datetime: moment() };
+      const params = { ...itemId, action_datetime: moment() };
       const response = await axios.post(URL_TXACTIONS, { data: params });
       const { id, attributes } = response.data.data;
       setTransactionData([
@@ -156,6 +166,14 @@ const StaffPage = () => {
     
   };
 
+  const handleSearch = (searchText) => {
+    setSearchText(searchText);
+    const jwtToken = getItem('jwt');
+    if (jwtToken) {
+      fetchItems(jwtToken, searchText);
+    }
+  };
+
   const refreshData = () => {
     const jwtToken = getItem('jwt');
     if (jwtToken) {
@@ -167,8 +185,8 @@ const StaffPage = () => {
 
   useEffect(() => {
     refreshData();
+    fetchItems();
   }, [getItem]);
-
   return (
     <div className="App">
       <Navbar bg="light" expand="lg">
@@ -184,21 +202,25 @@ const StaffPage = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <header className="App-header">
+     
+      <header className="App-header2">
         <Spin spinning={isLoading}>
-          <Typography.Title></Typography.Title>
-          <AddItem onItemAdded={addItem} />
+       
+         
           <Divider>
             <h4>Subject </h4>
           </Divider>
+          
+        </Spin>
+      </header>
+      <AppSearch value={searchText} onValueChange={setSearchText} onSearch={handleSearch}/>
+          <AddItem onItemAdded={addItem} />
           <TransactionListforstaff
             data={transactionData}
             onTransactionDeleted={deleteItem}
             onTransactionEdit={editItem}
             onTransactionEntry={showentry}
           />
-        </Spin>
-      </header>
     </div>
   );
 };

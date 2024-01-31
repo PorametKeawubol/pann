@@ -1,29 +1,31 @@
 
 
 .card {
-    border: 1px solid #ddd; /* Add a border to the cards */
-    border-radius: 8px; /* Rounded corners for the cards */
-    transition: box-shadow 0.3s; /* Smooth transition for the box-shadow effect */
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    transition: box-shadow 0.3s; 
   }
   
   .card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add box-shadow on hover for a subtle lift effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   }
   
   .card-title {
-    font-size: 1.2rem; /* Increase font size for the card title */
+    font-size: 1.2rem; 
     font-weight: bold;
   }
   
   .card-text {
-    color: #555; /* Set text color for the card text */
+    color: #555; 
   }
   
   .button-group {
-    margin-top: 10px; /* Add margin to the button group */
+    margin-top: 10px; 
   }
   
   .button-group button {
-    margin-right: 10px; /* Add margin between buttons */
+    margin-right: 10px;
+    margin-top: 10px; 
+   
   }
   

@@ -37,6 +37,7 @@ export const SessionStorageProvider = ({ children }) => {
     navigate('/');
   };
 
+
   const value = {
     setItem,
     getItem,

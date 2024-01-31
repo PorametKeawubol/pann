@@ -6,14 +6,7 @@ import { useState, useEffect } from 'react';
 
 export default function TransactionList(props) {
   const columns = [
-    {
-      title: 'Student Name',
-      dataIndex: 'username',
-      sorter: {
-        compare: (a, b) => a.name.localeCompare(b.name),
-        multiple: 1,
-      },
-    },
+
     {
       key: 'id',
       title: 'ID',
@@ -23,7 +16,14 @@ export default function TransactionList(props) {
         multiple: 2,
       },
     },
-   
+    {
+      title: 'Student Name',
+      dataIndex: 'username',
+      sorter: {
+        compare: (a, b) => a.name.localeCompare(b.name),
+        multiple: 1,
+      },
+    },
 
     {
       title: 'SeenDate-Time',
@@ -53,8 +53,8 @@ export default function TransactionList(props) {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <EditOutlined onClick={() => props.onTransactionEdit(record.itemId)} /> 
-          <DeleteOutlined onClick={() => props.onTransactionDeleted(record.itemId)}  style={{ color: "red", marginLeft: 10 }} />
+          <EditOutlined onClick={() => props.onTransactionEdit(record.id)} /> 
+          <DeleteOutlined onClick={() => props.onTransactionDeleted(record.id)}  style={{ color: "red", marginLeft: 10 }} />
         </Space>
       ),
     },

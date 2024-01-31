@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Button, Row, Col } from 'react-bootstrap';
 import { EditOutlined, DeleteOutlined, ArrowsAltOutlined } from "@ant-design/icons";
 import moment from 'moment';
+import './TransactionListforstaff.css';
 import './TransactionListforstaff';
 import { useState, useEffect } from 'react';
 

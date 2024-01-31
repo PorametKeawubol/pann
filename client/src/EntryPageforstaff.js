@@ -11,6 +11,7 @@ import { useSessionStorage } from './SessionStorage/useSessionStorage';
 
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL || "http://localhost:1337";
 const URL_TXACTIONS = 'api/events/:id/entries?filters[id][$eq]';
+const URL_Post = 'api/entries';
 
 
 const EntryPageforstaff = () => {
@@ -36,7 +37,7 @@ const EntryPageforstaff = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+      
       setTransactionData(response.data.data.flatMap(d => {
         return d.attributes.entries.data.map(entry => ({
           id: entry.id,
@@ -60,7 +61,8 @@ const EntryPageforstaff = () => {
     try {
       setIsLoading(true);
       const params = { ...item, action_datetime: moment() };
-      const response = await axios.post(URL_TXACTIONS, { data: params });
+      const response = await axios.post(URL_Post, { data: params },);
+      
       const { id, attributes } = response.data.data;
       setTransactionData([
         ...transactionData,
@@ -73,6 +75,7 @@ const EntryPageforstaff = () => {
       fetchItems(true);
     }
   };
+
 
   const editItem = (itemId) => {
     const currentItem = transactionData.find((item) => item.id === itemId);
@@ -118,8 +121,6 @@ const EntryPageforstaff = () => {
 
   const handleEdit = async (values, itemId) => {
     try {
-     
-  
       setIsLoading(true);
   
       const payload = {
@@ -169,6 +170,7 @@ const EntryPageforstaff = () => {
 
   useEffect(() => {
     refreshData();
+    fetchItems();
   }, [getItem]);
 
   return (
@@ -189,7 +191,7 @@ const EntryPageforstaff = () => {
       <header className="App-header">
         <Spin spinning={isLoading}>
           <Typography.Title></Typography.Title>
-          <PostEntry onItemAdded={addItem} />
+          <PostEntry onItemcreate={addItem} />
           <Divider>
             <h4>Subject entry</h4>
           </Divider>

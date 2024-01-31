@@ -4,6 +4,8 @@ import axios from 'axios';
 import TransactionList from './components/TransactionList';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { useSessionStorage } from './SessionStorage/useSessionStorage';
+import AppSeach from './components/AppSearch';
+
 
 
 
@@ -19,11 +21,20 @@ function StudentPage() {
   const [isShow, setIsShow] = useState(false);
   const { getItem } = useSessionStorage();
   const { handleLogout } = useSessionStorage();
+  const [searchText, setSearchText] = useState('');
 
-  const fetchItems = async (token) => {
+
+  const fetchItems = async (token,search) => {
     try {
       setIsLoading(true);
       const response = await axios.get(URL_TXACTIONS, {
+        params: {
+          filters: {
+            name: {
+              $eq: search,
+            },
+          },
+        },
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -42,6 +53,7 @@ function StudentPage() {
     }
   };
 
+  
 
 
   const handleTransactionShow = async (itemId) => {
@@ -98,6 +110,14 @@ function StudentPage() {
     }
   };
 
+  const handleSearch = (searchText) => {
+    setSearchText(searchText);
+    const jwtToken = getItem('jwt');
+    if (jwtToken) {
+      fetchItems(jwtToken, searchText);
+    }
+  };
+
   
   useEffect(() => {
     refreshData();
@@ -122,16 +142,17 @@ function StudentPage() {
       </Navbar>
       <header >
           <Divider><h4>Student Scores</h4></Divider>
+          <AppSeach value={searchText} onValueChange={setSearchText} onSearch={handleSearch}/>
       </header>
       <Spin spinning={isLoading}>
       <TransactionList
             data={transactionData}
             onTransactionShow={handleTransactionShow}
             onEyeInvisibleClick={onEyeInvisibleClick}
+            
           />
 </Spin>
     </div>
   );
 }
-
 export default StudentPage;
