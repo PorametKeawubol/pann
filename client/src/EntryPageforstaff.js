@@ -197,13 +197,37 @@ const EntryPageforstaff = () => {
         const workbook = xlsx.read(data, { type: "array" });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
+  
+        // Get the range of the worksheet
+        const range = xlsx.utils.decode_range(worksheet['!ref']);
+  
+        // Loop through each row in the first column and convert the value to string
+        for (let row = range.s.r; row <= range.e.r; row++) {
+          const cellAddress = xlsx.utils.encode_cell({ r: row, c: 0 });
+          const cellValue = worksheet[cellAddress] ? worksheet[cellAddress].v : undefined;
+          
+          if (cellValue !== undefined) {
+            worksheet[cellAddress].t = 's'; // Set the cell type to string
+            worksheet[cellAddress].v = cellValue.toString(); // Convert the value to string
+          }
+        }
+  
         const json = xlsx.utils.sheet_to_json(worksheet, { header: 1 });
+  
+        // Ensure all values in the first column are strings
+        const stringifiedFirstColumn = json.map(row => row[0].toString());
+        json.forEach((row, index) => {
+          row[0] = stringifiedFirstColumn[index];
+        });
+  
         console.log(json);
         setExcelData(json);
       };
       reader.readAsArrayBuffer(e.target.files[0]);
     }
   };
+
+  
 
   const PostExcel = async () => {
     try {
