@@ -220,7 +220,7 @@ const EntryPageforstaff = () => {
           row[0] = stringifiedFirstColumn[index];
         });
   
-        console.log(json);
+        console.log("นี่คือjson",json);
         setExcelData(json);
       };
       reader.readAsArrayBuffer(e.target.files[0]);
@@ -280,7 +280,7 @@ const EntryPageforstaff = () => {
     <div className="App">
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand>Staff Page</Navbar.Brand>
+          <Navbar.Brand style={{ fontWeight: 'bold', color: 'black' }} >Staff Page</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav>
@@ -300,7 +300,7 @@ const EntryPageforstaff = () => {
           <PostEntry onItemcreate={addItem} />
           <div style={{ marginTop: "10px" }}></div>
           <div>
-      <form>
+      <form className="upload-form" >
         <label htmlFor="upload">Upload File</label>
         <input
           type="file"
@@ -308,7 +308,6 @@ const EntryPageforstaff = () => {
           id="upload"
           onChange={readUploadFile}
         />
-
 <Button
           variant="success"
           onClick={PostExcel}
