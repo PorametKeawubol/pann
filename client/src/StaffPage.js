@@ -170,7 +170,7 @@ const StaffPage = () => {
     setSearchText(searchText);
     const jwtToken = getItem('jwt');
     if (jwtToken) {
-      fetchItems(jwtToken, searchText);
+      fetchItems(searchText);
     }
   };
 
@@ -180,6 +180,9 @@ const StaffPage = () => {
       axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
     };
   
+    const handleBackButtonClick = () => {
+      fetchItems();
+    };
 
   useEffect(() => {
     refreshData();
@@ -190,7 +193,12 @@ const StaffPage = () => {
     <div className="App">
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand>Staff Page</Navbar.Brand>
+        <Navbar.Brand style={{ fontWeight: 'bold', color: 'black' }}>Student Page</Navbar.Brand>
+          <Nav.Item>
+            <Nav.Link onClick={handleBackButtonClick} >
+              Show All
+            </Nav.Link>
+          </Nav.Item>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav>

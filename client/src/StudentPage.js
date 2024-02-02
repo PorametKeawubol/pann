@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Spin, Divider, Modal } from 'antd';
+import { Spin, Divider, Modal, } from 'antd';
 import axios from 'axios';
 import TransactionList from './components/TransactionList';
 import { Navbar, Container, Nav } from 'react-bootstrap';
@@ -118,6 +118,10 @@ function StudentPage() {
     }
   };
 
+  const handleBackButtonClick = () => {
+    fetchItems();
+  };
+
   
   useEffect(() => {
     refreshData();
@@ -129,7 +133,12 @@ function StudentPage() {
        
        <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand>Student Page</Navbar.Brand>
+          <Navbar.Brand style={{ fontWeight: 'bold', color: 'black' }}>Student Page</Navbar.Brand>
+          <Nav.Item>
+            <Nav.Link onClick={handleBackButtonClick} >
+              Show All
+            </Nav.Link>
+          </Nav.Item>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse className="justify-content-end">
             <Nav>
@@ -143,6 +152,7 @@ function StudentPage() {
       <header >
           <Divider><h4>Student Scores</h4></Divider>
           <AppSeach value={searchText} onValueChange={setSearchText} onSearch={handleSearch}/>
+          
       </header>
       <Spin spinning={isLoading}>
       <TransactionList

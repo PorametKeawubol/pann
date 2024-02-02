@@ -308,16 +308,15 @@ const EntryPageforstaff = () => {
           id="upload"
           onChange={readUploadFile}
         />
-      </form>
-      
-        <Button
+
+<Button
           variant="success"
           onClick={PostExcel}
           type="primary" 
         >
           Upload
         </Button>
-      
+      </form>
     </div>
 
           <div style={{ marginTop: "20px" }}></div>
