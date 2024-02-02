@@ -4,6 +4,7 @@
     border: 1px solid #ddd; 
     border-radius: 8px; 
     transition: box-shadow 0.3s; 
+    
   }
   
   .card:hover {

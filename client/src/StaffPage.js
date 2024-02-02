@@ -1,4 +1,4 @@
-import './App.css';
+import "./StaffPage.css" ;
 import React, { useState, useEffect, useRef } from 'react';
 import { Spin, Divider, Typography, Modal, Form, Input, Button, DatePicker } from 'antd';
 import moment from 'moment';
@@ -28,9 +28,12 @@ const StaffPage = () => {
   const { getItem } = useSessionStorage();
   const [searchText, setSearchText] = useState('');
 
-  const fetchItems = async (token,search) => {
+  const fetchItems = async (search) => {
     try {
       setIsLoading(true);
+      const jwtToken = getItem('jwt');
+      console.log("MAamma",jwtToken);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
       const response = await axios.get(URL_TXACTIONS, {
         params: {
           filters: {
@@ -38,9 +41,6 @@ const StaffPage = () => {
               $eq: search,
             },
           },
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
         },
       });
       setTransactionData(response.data.data.map((d) => ({
@@ -70,7 +70,7 @@ const StaffPage = () => {
       console.log(err);
     } finally {
       setIsLoading(false);
-      fetchItems(true);
+      fetchItems();
     }
   };
 
@@ -176,17 +176,16 @@ const StaffPage = () => {
 
   const refreshData = () => {
     const jwtToken = getItem('jwt');
-    if (jwtToken) {
-      fetchItems(jwtToken);
-    }
-  };
-
+      console.log("MAamma",jwtToken);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`;
+    };
   
 
   useEffect(() => {
     refreshData();
     fetchItems();
-  }, [getItem]);
+   
+  }, []);
   return (
     <div className="App">
       <Navbar bg="light" expand="lg">
@@ -202,19 +201,20 @@ const StaffPage = () => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-     
-      <header className="App-header2">
+      <header>
         <Spin spinning={isLoading}>
-       
-         
-          <Divider>
-            <h4>Subject </h4>
+          <Divider >
+            <h4>Subject</h4>
           </Divider>
-          
+          <div className="centered-components1">
+      <AppSearch value={searchText} onValueChange={setSearchText} onSearch={handleSearch} />
+      <div style={{ marginTop: '20px' }}></div>
+      <AddItem onItemAdded={addItem} />
+    </div>
         </Spin>
       </header>
-      <AppSearch value={searchText} onValueChange={setSearchText} onSearch={handleSearch}/>
-          <AddItem onItemAdded={addItem} />
+     
+          
           <TransactionListforstaff
             data={transactionData}
             onTransactionDeleted={deleteItem}

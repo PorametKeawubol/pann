@@ -1,50 +1,44 @@
-import { Button, Form, Input, DatePicker, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import React, { useState ,useRef,useEffect} from 'react';
+import { Button, Form, Input } from 'antd';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 export default function PostEntry(props) {
-  const [form] = Form.useForm()
+  const [form] = Form.useForm();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const itemId = searchParams.get('itemId');
+
   
-  
+  const initialValues = {
+    owner: '', 
+    result: '', 
+    event: itemId, 
+  };
+
   return (
-    <Form form={form} layout="inline" onFinish={(data) => {
-      props.onItemcreate(data);
-      form.resetFields();
-    }}>
-      <Form.Item
-        name="username"
-        label="Student Name"
-        rules={[{ required: true }]}
-      ><Input placeholder="Input Subject Name" />
+    <Form
+      form={form}
+      layout="inline"
+      onFinish={(data) => {
+        props.onItemcreate(data);
+        form.resetFields();
+      }}
+      initialValues={initialValues} 
+    >
+      <Form.Item name="owner" label="Student Name" rules={[{ required: true }]}>
+        <Input type="text" placeholder="Input Student Name" />
       </Form.Item>
-      <Form.Item
-        name="result"
-        label="Result"
-        rules={[{ required: true }]}
-      ><Input placeholder="Input Result" />
+      <Form.Item name="result" label="Result" rules={[{ required: true }]}>
+        <Input type="text" placeholder="Input Result" />
       </Form.Item>
-      
-      
+      <Form.Item name="event" label="Event" rules={[{ required: true }]}>
+        <Input type="number"  disabled defaultValue={itemId} />
+      </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">Add</Button>
-      </Form.Item>
-      <Form.Item
-        name="file"
-        label="File"
-        valuePropName="fileList"
-        getValueFromEvent={(e) => {
-          if (Array.isArray(e)) {
-            return e;
-          }
-          return e && e.fileList;
-        }}
-      >
-        <Upload beforeUpload={() => false} maxCount={1}>
-          <Button icon={<UploadOutlined />} type="default">
-            Upload File
-          </Button>
-        </Upload>
+        <Button type="primary" htmlType="submit">
+          Add
+        </Button>
       </Form.Item>
     </Form>
-  )
+  );
 }

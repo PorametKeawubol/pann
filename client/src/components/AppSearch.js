@@ -10,10 +10,10 @@ export default function AppSearch(props) {
   };
 
   return (
-    <Container className="mt-5">
+    <Container  className="mt-5 d-flex justify-content-center">
       <Row>
-        <Col sm={4}>
-          <Form className="d-flex">
+        <Col sm={15} >
+          <Form className="d-flex align-items-center">
             <InputGroup>
               <InputGroup.Text className="bg-white">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30px" height="30px">
@@ -29,6 +29,7 @@ export default function AppSearch(props) {
               />
             </InputGroup>
             <Button onClick={handleSearchClick}>Search</Button>
+            
           </Form>
         </Col>
       </Row>

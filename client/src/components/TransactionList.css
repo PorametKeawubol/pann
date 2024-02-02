@@ -3,11 +3,14 @@
     flex-wrap: wrap;
     justify-content: space-around;
     margin-top: 26px;
+    margin-left: 100px; 
+    margin-right: 100px;
   }
   
   .card {
     width: 15rem;
     margin-bottom: 20px;
+    margin-right: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     transition: transform 0.3s ease-in-out;
